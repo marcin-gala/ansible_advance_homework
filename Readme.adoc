@@ -1,6 +1,6 @@
 ==== Run Ansible Homework Assignment and grade
 
-* At first update GUIDs to the one provisioned: 
+At first update GUIDs to the one provisioned: 
 
 5922 - GUID PROD_ANS_TOWER_HOMEWORK_LAB
 
