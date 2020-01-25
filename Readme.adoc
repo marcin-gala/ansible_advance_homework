@@ -17,30 +17,19 @@
     chown root:root /root/.ssh/mykey.pem  
 
   4. Remove hashed lines from openstack public certificate
-
-    [source,text]
-    ----
-    sed -i '/^#/ d'  /root/.ssh/openstack.pem
-    ----
+    
+    sed -i '/^#/ d'  /root/.ssh/openstack.pem    
 
   5. Verify that it is possible to connect to OSP workstation
 
-    [source,text]
-    ----
     ssh -i /root/.ssh/mykey.pem username-company.name@workstation-<GUID-OSP>.rhpds.opentlc.com
-    ----
 
   6. Clone github repo
 
-    [source,text]
-    ----
     git clone https://github.com/marcin-gala/ansible_advance_homework.git
-    ----
 
   7. Run workstation preparation playbook with valid parameters
 
-    [source,text]
-    ----
     cd ansible_advance_homework
     OSP_GUID=<GUID-OSP>
     ansible-playbook site-setup-workstation.yml -e OSP_GUID=${OSP_GUID} --private-key=/root/.ssh/mykey.pem -u username-company.name
@@ -53,21 +42,14 @@
     JQ_REPO_BASE=http://www.opentlc.com/download/ansible_bootcamp
     REGION=us-east-1
     RH_MAIL_ID=username@company.name
-    ----
 
   8. Run workstation installation as isolated node playbook:
 
-    [source,text]
-    ----
     ansible-playbook site-install-isolated-node.yml -e TOWER_GUID=${TOWER_GUID} -e OSP_GUID=${OSP_GUID} -e opentlc_login=${OPENTLC_LOGIN} -e path_to_opentlc_key=/root/.ssh/mykey.pem -e param_repo_base=${JQ_REPO_BASE} -e opentlc_password=${OPENTLC_PASSWORD} -e REGION_NAME=${REGION} -e EMAIL=${RH_MAIL_ID} -e github_repo=${GITHUB_REPO}
-    ----
 
   9. Run Ansible Tower Configuration playbook:
 
-    [source,text]
-    ----
     ansible-playbook site-config-tower.yml -e tower_GUID=${TOWER_GUID} -e osp_GUID=${OSP_GUID} -e opentlc_login=${OPENTLC_LOGIN} -e path_to_opentlc_key=/root/.ssh/mykey.pem -e param_repo_base=${JQ_REPO_BASE} -e opentlc_password=${OPENTLC_PASSWORD} -e REGION_NAME=${REGION} -e EMAIL=${RH_MAIL_ID} -e github_repo=${GITHUB_REPO}
-    ----
 
   10. Login to one of the Tower nodes:
 
@@ -81,13 +63,9 @@
 
 10. After successfull completion of cicd workflow run grading playbook from bastion host:
 
-    [source,text]
-    ----
     OSP_GUID=<GUID-OSP>
     ANSIBLE_ADVANCE_GUID=<GUID-ThreeTierApp>
     ansible-playbook grading-script.yml -e OSP_GUID=${OSP_GUID} -e ANSIBLE_ADVANCE_GUID=${ANSIBLE_ADVANCE_GUID}
-    ----
-
 
 .List of Playbooks
 [%header,cols=2*]
