@@ -1,6 +1,6 @@
 ==== Run Ansible Homework Assignment and grade
 
-  1. Create 2 Lab environments
+  1. Provision two lab environments
 
     - OPENTLC Automation -> Ansible Advanced - Homework 
     - OPENTLC Automation -> Ansible Advanced - OpenStack
