@@ -1,60 +1,96 @@
 ==== Run Ansible Homework Assignment and grade
 
-At first update GUIDs to the one provisioned: 
+  1. Create 2 Lab environments
 
-5922 - GUID PROD_ANS_TOWER_HOMEWORK_LAB
+    - OPENTLC Automation -> Ansible Advanced - Homework 
+    - OPENTLC Automation -> Ansible Advanced - OpenStack
 
-5a87 - GUID Ansible_Advance_OSP_ENV_v5.6-i-8ccc
+  2. Connect to bastion host to connect using ssh key (.ppk file in putty)
 
-e6ed - GUID PROD_THREE_TIER_APP (update GUID after 3TierApp environment will be provisioned) #
+    username-company.name@bastion.<GUID-Homework>.example.com
 
-[source,text]
-----
-# Ansible tower node:
-https://tower1.5922.example.opentlc.com
-admin
-r3dh4t1!
+  3. Copy private key to access workstation and configure necessary permissions to access that key
 
-#bastion host to connect using ssh key (.ppk file in putty)
-marcin.gala-atos.net@bastion.5922.example.opentlc.com
+    [source,text]
+    ----
+    sudo -i
+    vim /root/.ssh/mykey.pem
+    chmod 400 /root/.ssh/mykey.pem
+    chown root:root /root/.ssh/mykey.pem
+    ----
 
-#copy private key to access workstation and configure necessary permissions to access that key
-sudo -i
-vim /root/.ssh/mykey.pem
-chmod 400 /root/.ssh/mykey.pem
-chown root:root /root/.ssh/mykey.pem
+  4. Remove hashed lines from openstack public certificate
 
-# remove hashed lines from openstack public certificate
-sed -i '/^#/ d'  /root/.ssh/openstack.pem
+    [source,text]
+    ----
+    sed -i '/^#/ d'  /root/.ssh/openstack.pem
+    ----
 
-#verify that it is possible to connect to OSP workstation
-ssh -i /root/.ssh/mykey.pem marcin.gala-atos.net@workstation-5a87.rhpds.opentlc.com
+  5. Verify that it is possible to connect to OSP workstation
 
-#clone github repo
-git clone https://github.com/marcin-gala/ansible_advance_homework.git
+    [source,text]
+    ----
+    ssh -i /root/.ssh/mykey.pem username-company.name@workstation-<GUID-OSP>.rhpds.opentlc.com
+    ----
 
-cd ansible_advance_homework
-OSP_GUID=5a87
-ansible-playbook site-setup-workstation.yml -e OSP_GUID=${OSP_GUID} --private-key=/root/.ssh/mykey.pem -u marcin.gala-atos.net
+  6. Clone github repo
 
-TOWER_GUID=5922
-OSP_GUID=5a87
-OPENTLC_LOGIN=marcin.gala-atos.net
-OPENTLC_PASSWORD=password
-GITHUB_REPO=https://github.com/marcin-gala/ansible_advance_homework.git
-JQ_REPO_BASE=http://www.opentlc.com/download/ansible_bootcamp
-REGION=us-east-1
-RH_MAIL_ID=marcin.gala@atos.net
+    [source,text]
+    ----
+    git clone https://github.com/marcin-gala/ansible_advance_homework.git
+    ----
 
-ansible-playbook site-install-isolated-node.yml -e TOWER_GUID=${TOWER_GUID} -e OSP_GUID=${OSP_GUID} -e opentlc_login=${OPENTLC_LOGIN} -e path_to_opentlc_key=/root/.ssh/mykey.pem -e param_repo_base=${JQ_REPO_BASE} -e opentlc_password=${OPENTLC_PASSWORD} -e REGION_NAME=${REGION} -e EMAIL=${RH_MAIL_ID} -e github_repo=${GITHUB_REPO}
+  7. Run workstation preparation playbook with valid parameters
 
-ansible-playbook site-config-tower.yml -e tower_GUID=${TOWER_GUID} -e osp_GUID=${OSP_GUID} -e opentlc_login=${OPENTLC_LOGIN} -e path_to_opentlc_key=/root/.ssh/mykey.pem -e param_repo_base=${JQ_REPO_BASE} -e opentlc_password=${OPENTLC_PASSWORD} -e REGION_NAME=${REGION} -e EMAIL=${RH_MAIL_ID} -e github_repo=${GITHUB_REPO}
+    [source,text]
+    ----
+    cd ansible_advance_homework
+    OSP_GUID=<GUID-OSP>
+    ansible-playbook site-setup-workstation.yml -e OSP_GUID=${OSP_GUID} --private-key=/root/.ssh/mykey.pem -u username-company.name
 
-# grading
-OSP_GUID=5a87
-ANSIBLE_ADVANCE_GUID=e6ed
-ansible-playbook grading-script.yml -e OSP_GUID=${OSP_GUID} -e ANSIBLE_ADVANCE_GUID=${ANSIBLE_ADVANCE_GUID}
-----
+    TOWER_GUID=<GUID-Homework>
+    OSP_GUID=<GUID-OSP>
+    OPENTLC_LOGIN=username-company.name
+    OPENTLC_PASSWORD=<password to access lab environment provisioning>
+    GITHUB_REPO=https://github.com/marcin-gala/ansible_advance_homework.git
+    JQ_REPO_BASE=http://www.opentlc.com/download/ansible_bootcamp
+    REGION=us-east-1
+    RH_MAIL_ID=username@company.name
+    ----
+
+  8. Run workstation installation as isolated node playbook:
+
+    [source,text]
+    ----
+    ansible-playbook site-install-isolated-node.yml -e TOWER_GUID=${TOWER_GUID} -e OSP_GUID=${OSP_GUID} -e opentlc_login=${OPENTLC_LOGIN} -e path_to_opentlc_key=/root/.ssh/mykey.pem -e param_repo_base=${JQ_REPO_BASE} -e opentlc_password=${OPENTLC_PASSWORD} -e REGION_NAME=${REGION} -e EMAIL=${RH_MAIL_ID} -e github_repo=${GITHUB_REPO}
+    ----
+
+  9. Run Ansible Tower Configuration playbook:
+
+    [source,text]
+    ----
+    ansible-playbook site-config-tower.yml -e tower_GUID=${TOWER_GUID} -e osp_GUID=${OSP_GUID} -e opentlc_login=${OPENTLC_LOGIN} -e path_to_opentlc_key=/root/.ssh/mykey.pem -e param_repo_base=${JQ_REPO_BASE} -e opentlc_password=${OPENTLC_PASSWORD} -e REGION_NAME=${REGION} -e EMAIL=${RH_MAIL_ID} -e github_repo=${GITHUB_REPO}
+    ----
+
+  10. Login to one of the Tower nodes:
+
+    URL	- https://tower(1-3).<GUID-OSP>.example.opentlc.com
+    Username - Admin
+    Password - r3dh4t1!
+
+  9. Execute "cicd_workflow" by clicking on rocket symbol (Templates tab in Ansible Tower web interface)
+
+    It will create QA, Prod environments, deploy Three Tier Apps and test them.
+
+10. After successfull completion of cicd workflow run grading playbook from bastion host:
+
+    [source,text]
+    ----
+    OSP_GUID=<GUID-OSP>
+    ANSIBLE_ADVANCE_GUID=<GUID-ThreeTierApp>
+    ansible-playbook grading-script.yml -e OSP_GUID=${OSP_GUID} -e ANSIBLE_ADVANCE_GUID=${ANSIBLE_ADVANCE_GUID}
+    ----
+
 
 .List of Playbooks
 [%header,cols=2*]
