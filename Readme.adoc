@@ -10,14 +10,11 @@
     username-company.name@bastion.<GUID-Homework>.example.com
 
   3. Copy private key to access workstation and configure necessary permissions to access that key
-
-    [source,text]
-    ----
+  
     sudo -i
     vim /root/.ssh/mykey.pem
     chmod 400 /root/.ssh/mykey.pem
-    chown root:root /root/.ssh/mykey.pem
-    ----
+    chown root:root /root/.ssh/mykey.pem  
 
   4. Remove hashed lines from openstack public certificate
 
