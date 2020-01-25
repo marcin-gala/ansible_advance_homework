@@ -22,7 +22,7 @@ changed: [localhost]
 
 TASK [debug] ***********************************************************************************************************************************************************************************************
 ok: [localhost] => {
-    "webpage.stdout": "<!doctype html>\n\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n\n  <title>Ansible Deployed Tomcat</title>\n  <meta name=\"description\" content=\"Ansible Created Content\">\n  <meta name=\"tony.g.kay@gmail.com\" content=\"Ansible\"SitePoint\">\n\n</head>\n\n<body>\n    <h1>Ansible has done its job - Welcome to Tomcat on 52.70.90.137</h1>\n</body>\n</html>"
+    "webpage.stdout": "<!doctype html>\n\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n\n  <title>Ansible Deployed Tomcat</title>\n  <meta name=\"description\" content=\"Ansible Created Content\">\n  <meta name=\"tony.g.kay@gmail.com\" content=\"Ansible\"SitePoint\">\n\n</head>\n\n<body>\n    <h1>Ansible has done its job - Welcome to Tomcat on 52.45.109.235</h1>\n</body>\n</html>"
 }
 
 TASK [Fail] ************************************************************************************************************************************************************************************************
